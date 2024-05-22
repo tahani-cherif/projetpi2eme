@@ -4,6 +4,7 @@ import { notFoundError, errorHundler } from "./middlewares/error-handler.js";
 import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
+import { router as userRoutes } from "./routes/user.js";
 dotenv.config({ path: ".env" });
 const app = express();
 const port = process.env.PORT;
@@ -20,8 +21,11 @@ mongoose
 app.use(cors());
 app.use(morgan(process.env.NODE_ENV));
 app.use(express.json());
+
+app.use("/api/users", userRoutes);
+
 app.use(notFoundError);
 app.use(errorHundler);
 app.listen(port, () => {
-  console.log(`Server running at http://127.0.0.1:${port}/`);
+  console.log(`Server running at http://localhost:${port}/`);
 });
