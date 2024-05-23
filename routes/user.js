@@ -14,7 +14,7 @@ import {
   updateuser,
   deleteuser,
   changeuserpassword,
-} from "../controller/user.js";
+} from "../controllers/user.js";
 
 const router = express.Router();
 
