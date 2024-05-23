@@ -5,6 +5,7 @@ import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
 import { router as userRoutes } from "./routes/user.js";
+import reclamationRoutes from './routes/reclamation.js';
 dotenv.config({ path: ".env" });
 const app = express();
 const port = process.env.PORT;
@@ -23,6 +24,7 @@ app.use(morgan(process.env.NODE_ENV));
 app.use(express.json());
 
 app.use("/api/users", userRoutes);
+app.use('/reclamation', reclamationRoutes);
 
 app.use(notFoundError);
 app.use(errorHundler);
