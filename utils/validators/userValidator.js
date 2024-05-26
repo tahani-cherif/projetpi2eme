@@ -9,9 +9,11 @@ export const getuserValidator = [
 ];
 
 export const createuserValidator = [
-  check("cin").notEmpty().withMessage("CIN required"),
-  check("fullName").notEmpty().withMessage("Full name required"),
+  check("firstName").notEmpty().withMessage("firstName required"),
+  check("lastName").notEmpty().withMessage("lastName required"),
   check("address").notEmpty().withMessage("Address required"),
+  check("city").notEmpty().withMessage("city required"),
+  check("dateOfBirth").isDate().notEmpty().withMessage("dateOfBirth required"),
   check("phone")
     .notEmpty()
     .withMessage("Phone required")
@@ -50,9 +52,11 @@ export const createuserValidator = [
 ];
 
 export const updateuserValidator = [
-  check("cin").optional(),
-  check("fullName").optional(),
+  check("firstName").optional(),
+  check("lastName").optional(),
   check("address").optional(),
+  check("city").optional(),
+  check("dateOfBirth").optional().isDate(),
   check("phone")
     .optional()
     .isLength({ min: 8, max: 8 })
