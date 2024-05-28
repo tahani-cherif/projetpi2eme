@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import loisir from "./loisir.js";
 const { Schema, model } = mongoose;
 const DestinationSchema = new Schema(
     {
@@ -9,13 +10,16 @@ const DestinationSchema = new Schema(
       description: {
         type: String,
       },
-      region: [
+      localisation: {
+        type: String,
+      },
+      loisir: [
         {
           type: Schema.Types.ObjectId,
-          ref: "Region",
+          ref: "Loisir",
         },
-    ],
+      ],
 },
 { timestamps: true }
 );
-export default model("Destination", DestinationShema);
+export default model("Destination", DestinationSchema);
