@@ -12,24 +12,24 @@ import loisirCategoryValidator from '../utils/validators/loisirCategoryValidator
 const router = express.Router();
 
 // Route to create a new loisir category
-router.post('/loisir-categories', loisirCategoryValidator, createLoisirCategory);
+router.post('/', loisirCategoryValidator, createLoisirCategory);
 
 // Route to get all loisir categories
-router.get('/loisir-categories', getAllLoisirCategories);
+router.get('/', getAllLoisirCategories);
 
 // Route to get a single loisir category by ID
-router.get('/loisir-categories/:id', [
+router.get('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], getLoisirCategoryById);
 
 // Route to update a loisir category by ID
-router.put('/loisir-categories/:id', [
+router.put('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format'),
   ...loisirCategoryValidator
 ], updateLoisirCategory);
 
 // Route to delete a loisir category by ID
-router.delete('/loisir-categories/:id', [
+router.delete('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], deleteLoisirCategory);
 
