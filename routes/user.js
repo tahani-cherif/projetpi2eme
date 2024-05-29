@@ -15,6 +15,7 @@ import {
   deleteuser,
   changeuserpassword,
 } from "../controllers/user.js";
+import { allowedTo, protect } from "../controllers/auth.js";
 
 const router = express.Router();
 
@@ -24,7 +25,10 @@ router.put(
   changeuserpassword
 );
 
-router.route("/").get(getusers).post(createuserValidator, createuser);
+router
+  .route("/")
+  .get(protect, allowedTo("admin"), getusers)
+  .post(createuserValidator, createuser);
 
 router
   .route("/:id")
