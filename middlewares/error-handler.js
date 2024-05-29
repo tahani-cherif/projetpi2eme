@@ -5,7 +5,7 @@ export function notFoundError(req, res, next) {
 }
 
 export function errorHundler(err, req, res, next) {
-  res.status(err.status || 500).json({
+  res.status(err?.status || 500).json({
     message: err.message,
   });
 }
