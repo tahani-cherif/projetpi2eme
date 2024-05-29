@@ -3,11 +3,6 @@ import { validationResult } from 'express-validator';
 
 // Create a new loisir
 export const createLoisir = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
   try {
     const loisir = new Loisir(req.body);
     await loisir.save();

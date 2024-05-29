@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import loisir from "./loisir.js";
 const { Schema, model } = mongoose;
 const DestinationSchema = new Schema(
     {
@@ -13,12 +12,12 @@ const DestinationSchema = new Schema(
       localisation: {
         type: String,
       },
-      loisir: [
+      loisir: 
         {
           type: Schema.Types.ObjectId,
           ref: "Loisir",
         },
-      ],
+      
 },
 { timestamps: true }
 );

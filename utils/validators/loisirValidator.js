@@ -41,9 +41,7 @@ const loisirValidator = [
     .isFloat({ gt: 0 })
     .withMessage('Average price must be a positive number.'),
   body('category')
-    .optional()
-    .isArray()
-    .withMessage('Category must be an array.')
+  .notEmpty()
     .custom((categories) => {
       for (let id of categories) {
         if (!id.match(/^[0-9a-fA-F]{24}$/)) {

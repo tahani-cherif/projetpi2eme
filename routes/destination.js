@@ -12,24 +12,24 @@ import destinationValidator from '../utils/validators/destinationValidator.js';
 const router = express.Router();
 
 // Route to create a new destination
-router.post('/destinations', destinationValidator, createDestination);
+router.post('/', destinationValidator, createDestination);
 
 // Route to get all destinations
-router.get('/destinations', getAllDestinations);
+router.get('/', getAllDestinations);
 
 // Route to get a single destination by ID
-router.get('/destinations/:id', [
+router.get('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], getDestinationById);
 
 // Route to update a destination by ID
-router.put('/destinations/:id', [
+router.put('/:id',, [
   param('id').isMongoId().withMessage('Invalid ID format'),
   ...destinationValidator
 ], updateDestination);
 
 // Route to delete a destination by ID
-router.delete('/destinations/:id', [
+router.delete('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], deleteDestination);
 

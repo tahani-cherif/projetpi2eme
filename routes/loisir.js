@@ -12,24 +12,24 @@ import loisirValidator from '../utils/validators/loisirValidator.js';
 const router = express.Router();
 
 // Route to create a new loisir
-router.post('/loisirs', loisirValidator, createLoisir);
+router.post('/', loisirValidator, createLoisir);
 
 // Route to get all loisirs
-router.get('/loisirs', getAllLoisirs);
+router.get('/', getAllLoisirs);
 
 // Route to get a single loisir by ID
-router.get('/loisirs/:id', [
+router.get('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], getLoisirById);
 
 // Route to update a loisir by ID
-router.put('/loisirs/:id', [
+router.put('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format'),
   ...loisirValidator
 ], updateLoisir);
 
 // Route to delete a loisir by ID
-router.delete('/loisirs/:id', [
+router.delete('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], deleteLoisir);
 

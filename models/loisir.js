@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import category from "./loisircategory.js";
 const { Schema, model } = mongoose;
 const LoisirSchema = new Schema(
   {
@@ -33,12 +32,12 @@ const LoisirSchema = new Schema(
     averageprice: {
       type: Number,
     },
-    category: [
+    category: 
       {
+        required: true,
         type: Schema.Types.ObjectId,
         ref: "LoisirCategory",
       },
-    ],
   },
   { timestamps: true }
 );
