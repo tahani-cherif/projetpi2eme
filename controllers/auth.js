@@ -13,8 +13,34 @@ const signup = asyncHandler(async (req, res, next) => {
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRE_TIME,
   });
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "cheriftahani92@gmail.com",
+      pass: "gnaqzqjdlqzyhxyl",
+    },
+  });
 
-  res.status(201).json({ data: user, token });
+  const mail_configs = {
+    from: "cheriftahani92@gmail.com",
+    to: req.body.email,
+    subject: "Email Verification",
+    html: `<p>Please verify your email by clicking the following link: <a href="http://localhost:8080/api/auth/approvedaccount/${token}">http://localhost:8080/api/auth/approvedaccount/${token}</a></p>`,
+  };
+  transporter.sendMail(mail_configs, function (error, info) {
+    if (error) {
+      return next(new ApiError(error, 404));
+    }
+    return res.status(200).json({
+      success: true,
+      data: user,
+      token,
+      message:
+        "User registered. Please check your email to verify your account.",
+    });
+  });
 });
 
 // @desc    Login
@@ -25,6 +51,9 @@ const login = asyncHandler(async (req, res, next) => {
 
   if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
     return next(new ApiError("Incorrect email or password", 401));
+  }
+  if (!user.status) {
+    return next(new ApiError("your account is not approved", 503));
   }
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRE_TIME,
@@ -53,7 +82,6 @@ const forgetpassword = asyncHandler(async (req, res, next) => {
       pass: "gnaqzqjdlqzyhxyl",
     },
   });
-
   const mail_configs = {
     from: "cheriftahani92@gmail.com",
     to: req.body.email,
@@ -90,6 +118,26 @@ const forgetpassword = asyncHandler(async (req, res, next) => {
     });
   });
 });
+// @desc    update password
+// @route   GET /api/auth/updatepassword
+// @access  Public
+const updatepassword = asyncHandler(async (req, res, next) => {
+  const user = await usermodel.find({ tokenPassword: req.body.token });
+  if (user.length === 0) throw new NotAcceptable();
+  console.log(user);
+  const password = await bcrypt.hash(req.body.password, 12);
+  await usermodel.findOneAndUpdate(
+    { _id: user[0]._id },
+    {
+      tokenPassword: "",
+      password: password,
+    }
+  );
+  res.status(200).json({
+    success: true,
+    data: "password updated",
+  });
+});
 
 // @desc   Assurer que l'utilisateur est connecté
 const protect = asyncHandler(async (req, res, next) => {
@@ -114,7 +162,6 @@ const protect = asyncHandler(async (req, res, next) => {
   try {
     // Vérifier le jeton et extraire l'ID de l'utilisateur
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    console.log(decoded);
     // Vérifier si l'utilisateur existe
     const currentUser = await usermodel.findById(decoded.userId);
     if (!currentUser) {
@@ -164,5 +211,27 @@ const allowedTo = (...roles) =>
     }
     next();
   });
+const approvedaccount = asyncHandler(async (req, res, next) => {
+  const { token } = req.params;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const user = await usermodel.findById(decoded.userId);
+    if (!user) {
+      return res.status(400).send("Invalid token");
+    }
+    await usermodel.findByIdAndUpdate(user._id, { status: true });
 
-export { signup, login, allowedTo, protect, forgetpassword };
+    res.send("Email verified successfully");
+  } catch (error) {
+    res.status(500).send("Error verifying email");
+  }
+});
+export {
+  signup,
+  login,
+  allowedTo,
+  protect,
+  forgetpassword,
+  updatepassword,
+  approvedaccount,
+};
