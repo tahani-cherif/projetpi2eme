@@ -1,12 +1,17 @@
-import express from "express";
+// import express from "express";
 
 
-import { notifmail} from "../controllers/mail.js";
+// import { notifadminmail, notifclientmail} from "../controllers/mail.js";
+// import { mailValidationRules } from "../utils/validators/mailValidator.js";
 
-const router = express.Router();
+// const router = express.Router();
 
 
-router.route("/").post(
-    notifmail);
+// router.route("/toadmin").post(
+//     mailValidationRules(),
+//     notifadminmail);
 
-export default router ;
+
+//     router.route("/toclient").post(
+//         notifclientmail);
+// export default router ;

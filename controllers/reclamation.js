@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 
 import Reclamation from "../models/reclamation.js";
+import { notifclientmail, notifadminmail } from "./mail.js";
 
 
 export function getAll(req, res) {
@@ -26,6 +27,19 @@ export function addOnce(req, res) {
       
     })
       .then((newReclamation) => {
+
+        notifadminmail(req.body.email, req.body.type, req.body.message, "objet").then(response => {
+          console.log(response);
+        }) .catch(error => {
+          console.error("Error:", error);
+        });
+        /* appel fctmailclient*/
+        notifclientmail(req.body.email, req.body.type, req.body.message).then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
         res.status(200).json({
           message: newReclamation.message,
           status: newReclamation.status,
