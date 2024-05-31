@@ -4,6 +4,8 @@ import asyncHandler from "express-async-handler";
 
 import ApiError from "../utils/apiError.js";
 
+import nodemailer from "nodemailer";
+
 
 
 export const notifmail= asyncHandler(async (req, res, next) => {

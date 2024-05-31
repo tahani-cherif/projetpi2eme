@@ -16,7 +16,6 @@ import reponseRoutes from './routes/reponse.js';
 import typeRoutes from './routes/type.js';
 import mailRoutes from './routes/mail.js';
 import { router as authRoutes } from "./routes/auth.js";
-import reclamationRoutes from "./routes/reclamation.js";
 
 dotenv.config({ path: ".env" });
 
