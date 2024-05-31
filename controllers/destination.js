@@ -1,15 +1,29 @@
 import Destination from '../models/destination.js';
 import { validationResult } from 'express-validator';
+import cloudinary from '../cloudinary.js';
 
 // Create a new destination
 export const createDestination = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
+  
   try {
-    const destination = new Destination(req.body);
+    
+    let imageUrl = '';
+    if (req.file ) {
+     
+      //const file = req.files.image;
+      
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'destinations'
+      });
+      
+      imageUrl = result.secure_url;
+    }
+
+    const destination = new Destination({
+      ...req.body,
+      imageUrl
+    });
+
     await destination.save();
     res.status(201).json(destination);
   } catch (err) {
@@ -20,7 +34,7 @@ export const createDestination = async (req, res) => {
 // Get all destinations
 export const getAllDestinations = async (req, res) => {
   try {
-    const destinations = await Destination.find().populate('loisir');
+    const destinations = await Destination.find();
     res.status(200).json(destinations);
   } catch (err) {
     res.status(500).json({ error: 'Internal Server Error' });
@@ -48,7 +62,16 @@ export const updateDestination = async (req, res) => {
   }
 
   try {
-    const destination = await Destination.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    let updateData = req.body;
+    if (req.files && req.files.image) {
+      const file = req.files.image;
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: 'destinations'
+      });
+      updateData.imageUrl = result.secure_url;
+    }
+
+    const destination = await Destination.findByIdAndUpdate(req.params.id, updateData, { new: true, runValidators: true });
     if (!destination) {
       return res.status(404).json({ error: 'Destination not found' });
     }

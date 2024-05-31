@@ -65,3 +65,23 @@ export const deleteLoisir = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// Get loisirs by category "restaurant" and kitchen type
+export const getLoisirsByCategoryAndKitchen = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { kitchen } = req.query;
+
+  try {
+    const loisirs = await Loisir.find({
+      kitchen: kitchen,
+     // category: await Category.findOne({ name: "restaurant" })._id
+    }).populate('category');
+    res.status(200).json(loisirs);
+  } catch (err) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

@@ -4,7 +4,7 @@ import { notFoundError, errorHundler } from "./middlewares/error-handler.js";
 import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
-
+import cloudinary from "cloudinary";
 import destinationRoutes from './routes/destination.js';
 import loisirRoutes from './routes/loisir.js';
 import loisirCategoryRoutes from './routes/loisircategory.js';
@@ -32,7 +32,7 @@ mongoose
 app.use(cors());
 app.use(morgan(process.env.NODE_ENV));
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 app.use('/api/destinations', destinationRoutes);
 app.use('/api/loisirs', loisirRoutes);
 app.use('/api/loisirCategories', loisirCategoryRoutes);
