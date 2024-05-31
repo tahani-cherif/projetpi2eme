@@ -3,6 +3,7 @@ import ApiError from "../utils/apiError.js";
 import usermodel from "../models/user.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import nodemailer from "nodemailer";
 
 // @desc    signup
 // @route   GET /api/auth/signup
@@ -30,6 +31,64 @@ const login = asyncHandler(async (req, res, next) => {
   });
   delete user._doc.password;
   res.status(200).json({ data: user, token });
+});
+
+// @desc    forgetpassword
+// @route   GET /api/auth/forgetpassword
+// @access  Public
+const forgetpassword = asyncHandler(async (req, res, next) => {
+  const user = await usermodel.findOne({ email: req.body.email });
+  if (!user) throw new NotAcceptable();
+  await usermodel.findByIdAndUpdate(user?._id, {
+    tokenPassword: req.body.token,
+  });
+
+  const subject = "Reset Password";
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "cheriftahani92@gmail.com",
+      pass: "gnaqzqjdlqzyhxyl",
+    },
+  });
+
+  const mail_configs = {
+    from: "cheriftahani92@gmail.com",
+    to: req.body.email,
+    subject: subject,
+    html: `<!DOCTYPE html>
+                <html lang="en" >
+                <head>
+                  <meta charset="UTF-8">
+                  <title>${req.body.object}</title>
+                  
+                </head>
+                <body>
+                <!-- partial:index.partial.html -->
+                <div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+                  <div style="margin:50px auto;width:70%;padding:20px 0">
+                    <p style="font-size:1.1em">Bonjour,</p>
+                    <p style="font-size:1.1em">cliquer sur cette button pour mise a jour votre button</p>
+                 <button>update password</button>
+                 token forget password : ${req.body.token}
+                  </div>
+                </div>
+                <!-- partial -->
+                  
+                </body>
+                </html>`,
+  };
+  transporter.sendMail(mail_configs, function (error, info) {
+    if (error) {
+      return next(new ApiError(error, 404));
+    }
+    return res.status(200).json({
+      success: true,
+      data: "Email sent",
+    });
+  });
 });
 
 // @desc   Assurer que l'utilisateur est connecté
@@ -106,4 +165,4 @@ const allowedTo = (...roles) =>
     next();
   });
 
-export { signup, login, allowedTo, protect };
+export { signup, login, allowedTo, protect, forgetpassword };
