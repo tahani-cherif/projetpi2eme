@@ -42,6 +42,10 @@ const userShema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    tokenPassword: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

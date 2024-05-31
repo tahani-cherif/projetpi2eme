@@ -27,7 +27,7 @@ router.put(
 
 router
   .route("/")
-  .get(protect, allowedTo("admin"), getusers)
+  .get(protect, allowedTo("admin", "user"), getusers)
   .post(createuserValidator, createuser);
 
 router
