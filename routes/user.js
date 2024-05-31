@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
   getuserValidator,
   updateuserValidator,
@@ -14,6 +15,7 @@ import {
   updateuser,
   deleteuser,
   changeuserpassword,
+  countuser,
 } from "../controllers/user.js";
 import { allowedTo, protect } from "../controllers/auth.js";
 
@@ -27,13 +29,15 @@ router.put(
 
 router
   .route("/")
-  .get(protect, allowedTo("admin"), getusers)
-  .post(createuserValidator, createuser);
+  .get(protect, allowedTo("admin", "user"), getusers)
+  .post(protect, allowedTo("admin"), createuserValidator, createuser);
+
+router.route("/count").get(protect, allowedTo("admin"), countuser);
 
 router
   .route("/:id")
   .get(getuserValidator, getuser)
-  .put(updateuserValidator, updateuser)
-  .delete(deleteuserValidator, deleteuser);
+  .put(protect, allowedTo("admin", "user"), updateuserValidator, updateuser)
+  .delete(protect, allowedTo("admin"), deleteuserValidator, deleteuser);
 
 export { router };

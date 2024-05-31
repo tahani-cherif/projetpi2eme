@@ -57,6 +57,17 @@ const deleteuser = asyncHandler(async (req, res, next) => {
   }
   res.status(204).send();
 });
+// @desc    count  user
+// @route   Get api/users/count
+// @access  Private
+const countuser = asyncHandler(async (req, res, next) => {
+  const user = await usermodel.find();
+  res.status(200).send({
+    count: user.length,
+    userApproved: user.filter((user) => user.status).length,
+    userNotApproved: user.filter((user) => !user.status).length,
+  });
+});
 
 // @desc    Update password
 // @route   PUT api/users/:id
@@ -81,4 +92,5 @@ export {
   updateuser,
   deleteuser,
   changeuserpassword,
+  countuser,
 };

@@ -1,13 +1,27 @@
 import { check } from "express-validator";
 import validatorMiddleware from "../../middlewares/validatorMiddleware.js";
 import User from "../../models/user.js";
+import moment from "moment";
 
 export const signupValidator = [
   check("firstName").notEmpty().withMessage("firstName required"),
   check("lastName").notEmpty().withMessage("lastName required"),
   check("address").notEmpty().withMessage("Address required"),
   check("city").notEmpty().withMessage("city required"),
-  check("dateOfBirth").isDate().notEmpty().withMessage("dateOfBirth required"),
+  check("dateOfBirth")
+    .isDate()
+    .notEmpty()
+    .withMessage("dateOfBirth required")
+    .custom((val) => {
+      const startDate = new Date(val);
+      const endDate = new Date();
+      const differenceInMilliseconds = endDate - startDate;
+      const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
+      const differenceInYears = differenceInMilliseconds / millisecondsPerYear;
+      if (differenceInYears < 22) {
+        return Promise.reject(new Error("date of birth min 22"));
+      } else return true;
+    }),
   check("phone")
     .notEmpty()
     .withMessage("Phone required")
@@ -56,5 +70,32 @@ export const loginValidator = [
     .withMessage("Password required")
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters"),
+  validatorMiddleware,
+];
+export const forgtpasswordvalidator = [
+  check("email")
+    .notEmpty()
+    .withMessage("Email required")
+    .isEmail()
+    .withMessage("Invalid email address"),
+  check("token").notEmpty().withMessage("token required"),
+  validatorMiddleware,
+];
+export const updatepasswordValidator = [
+  check("token").notEmpty().withMessage("token required"),
+  check("password")
+    .notEmpty()
+    .withMessage("Password required")
+    .isLength({ min: 8 })
+    .withMessage("Password too short")
+    .custom((password, { req }) => {
+      if (password !== req.body.passwordconfirm) {
+        throw new Error("Password confirmation does not match");
+      }
+      return true;
+    }),
+  check("passwordconfirm")
+    .notEmpty()
+    .withMessage("Password confirmation required"),
   validatorMiddleware,
 ];
