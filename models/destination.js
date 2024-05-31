@@ -9,13 +9,16 @@ const DestinationSchema = new Schema(
       description: {
         type: String,
       },
-      region: [
+      localisation: {
+        type: String,
+      },
+      loisir: 
         {
           type: Schema.Types.ObjectId,
-          ref: "Region",
+          ref: "Loisir",
         },
-    ],
+      
 },
 { timestamps: true }
 );
-export default model("Destination", DestinationShema);
+export default model("Destination", DestinationSchema);

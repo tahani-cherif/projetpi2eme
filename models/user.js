@@ -1,16 +1,14 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+
 const { Schema, model } = mongoose;
 const userShema = new Schema(
   {
-    cin: {
+    firstName: {
       type: String,
       required: true,
     },
-    fullName: {
-      type: String,
-      required: true,
-    },
-    address: {
+    lastName: {
       type: String,
       required: true,
     },
@@ -18,8 +16,20 @@ const userShema = new Schema(
       type: String,
       required: true,
     },
+    address: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
     phone: {
       type: Number,
+      required: true,
+    },
+    dateOfBirth: {
+      type: Date,
       required: true,
     },
     password: {
@@ -32,8 +42,22 @@ const userShema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    status: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    tokenPassword: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
-
+userShema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  //hashing the password
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+});
 export default model("User", userShema);
