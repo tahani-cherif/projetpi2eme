@@ -1,22 +1,19 @@
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
-const reclamationSchema = new Schema(
+const reponseSchema = new Schema(
     {
         message: {
             type: String,
             required: true
         },
-        
-       type: {
-            type: String,
-            required: true
-        },
+       
+       
         status: {
             piece_jointe:String,
             type: String,
             required: true
-        },  
+        },
         
     },
     {
@@ -24,4 +21,4 @@ const reclamationSchema = new Schema(
     }
 );
 
-export default model('Reclamation', reclamationSchema);
+export default model('reponse', reponseSchema);

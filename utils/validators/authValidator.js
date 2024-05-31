@@ -1,7 +1,6 @@
 import { check } from "express-validator";
 import validatorMiddleware from "../../middlewares/validatorMiddleware.js";
 import User from "../../models/user.js";
-import moment from "moment";
 
 export const signupValidator = [
   check("firstName").notEmpty().withMessage("firstName required"),
