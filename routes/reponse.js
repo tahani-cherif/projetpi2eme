@@ -1,16 +1,16 @@
 import express from "express";
 import { body } from "express-validator";
 
-
+import { allowedTo, protect } from "../controllers/auth.js";
 import { getAll, addOnce, getOnce, putOnce,deleteOnce} from "../controllers/reponse.js";
-import { idValidationRules, reclamationValidationRules } from "../utils/validators/reclamationValidator.js";
+import { idValidationRules, reponseValidationRules } from "../utils/validators/reponseValidator.js";
 
 const router = express.Router();
 
 router
   .route("/")
   .get(getAll)
-  .post(
+  .post(protect, allowedTo("admin"), 
    
     body("message").isLength({ min: 5 }),
    
@@ -20,15 +20,15 @@ router
 
 router
   .route("/:_id")
-  .get(getOnce)
-  .put(
+  .get(protect, allowedTo("admin"),getOnce)
+  .put(protect, allowedTo("admin"), 
   
     body("message").isLength({ min: 5 }),
 
     body ("status"),
     putOnce
   )
-  .delete(
+  .delete(protect, allowedTo("admin"), 
     idValidationRules(),
     deleteOnce)
 

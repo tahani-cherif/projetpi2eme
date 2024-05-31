@@ -1,7 +1,7 @@
 
 import  { body, param } from 'express-validator';
 
-const reponseValidationRules = () => {
+export const reponseValidationRules = () => {
     return [
         body('message')
             .isString()
@@ -18,7 +18,7 @@ const reponseValidationRules = () => {
     ];
 };
 
-const idValidationRules = () => {
+export const idValidationRules = () => {
     return [
         param('id')
             .isMongoId()
