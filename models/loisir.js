@@ -38,6 +38,12 @@ const LoisirSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "LoisirCategory",
       },
+      destination: 
+        {
+          required: true,
+          type: Schema.Types.ObjectId,
+          ref: "Destination",
+        },
   },
   { timestamps: true }
 );
