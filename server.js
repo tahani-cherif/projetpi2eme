@@ -5,10 +5,16 @@ import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
 import { router as userRoutes } from "./routes/user.js";
+import { router as offreRoutes } from "./routes/offre.js";
+import { router as categorieRoutes } from "./routes/category-offre.js";
+
 dotenv.config({ path: ".env" });
 const app = express();
 const port = process.env.PORT;
 const databaseName = "bdpi";
+
+
+
 mongoose
   .connect(`${process.env.DB_URL}/${databaseName}`)
   .then(() => {
@@ -23,6 +29,8 @@ app.use(morgan(process.env.NODE_ENV));
 app.use(express.json());
 
 app.use("/api/users", userRoutes);
+app.use("/offre", offreRoutes);
+app.use("/categorie", categorieRoutes);
 
 app.use(notFoundError);
 app.use(errorHundler);
