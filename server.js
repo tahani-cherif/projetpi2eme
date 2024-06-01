@@ -11,6 +11,9 @@ import loisirCategoryRoutes from './routes/loisircategory.js';
 
 
 import { router as userRoutes } from "./routes/user.js";
+import { router as offreRoutes } from "./routes/offre.js";
+import { router as categorieRoutes } from "./routes/category-offre.js";
+
 import reclamationRoutes from './routes/reclamation.js';
 import reponseRoutes from './routes/reponse.js';
 import typeRoutes from './routes/type.js';
@@ -30,6 +33,9 @@ const app = express();
 
 const port = process.env.PORT;
 const databaseName = "bdpi";
+
+
+
 mongoose
   .connect(`${process.env.DB_URL}/${databaseName}`)
   .then(() => {
@@ -54,6 +60,8 @@ app.use("/api/stations", stationRoutes);
 
 
 app.use("/api/users", userRoutes);
+app.use("/offre", offreRoutes);
+app.use("/categorie", categorieRoutes);
 app.use('/api/reclamation', reclamationRoutes);
 app.use('/api/reponse', reponseRoutes);
 app.use('/api/type', typeRoutes);
