@@ -9,13 +9,16 @@ const DestinationSchema = new Schema(
       description: {
         type: String,
       },
-      region: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Region",
-        },
-    ],
+      localisation: {
+        type: String,
+      },
+      imageUrl: {
+        type: String,
+        required: true
+      },
+      
+      
 },
 { timestamps: true }
 );
-export default model("Destination", DestinationShema);
+export default model("Destination", DestinationSchema);
