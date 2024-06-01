@@ -14,6 +14,10 @@ import { router as userRoutes } from "./routes/user.js";
 import reclamationRoutes from './routes/reclamation.js';
 import reponseRoutes from './routes/reponse.js';
 import typeRoutes from './routes/type.js';
+import circuitRoutes from './routes/circuitRoutes.js';
+import typeTransportRoutes from './routes/typeTransportRoutes.js';
+import stationRoutes from './routes/stationRoutes.js';
+
 // import mailRoutes from './routes/mail.js';
 import { router as authRoutes } from "./routes/auth.js";
 
@@ -44,6 +48,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/destinations', destinationRoutes);
 app.use('/api/loisirs', loisirRoutes);
 app.use('/api/loisirCategories', loisirCategoryRoutes);
+app.use("/api/circuits", circuitRoutes);
+app.use("/api/typeTransports", typeTransportRoutes);
+app.use("/api/stations", stationRoutes);
 
 
 app.use("/api/users", userRoutes);
