@@ -23,6 +23,6 @@ router.route("/")
 router.route("/:id")
   .get(getreservationbyid)
   .put( updatereservation, updatereservation)
-  .delete( deletereservation, updatereservation);
+  .delete( deletereservation, deletereservation);
 
   export { router };

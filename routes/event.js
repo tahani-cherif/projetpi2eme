@@ -13,12 +13,13 @@ import {
   creatEvent,
   updateevent,
   deleteevent,
+  getAllEvent
 } from "../controllers/event.js"
 
 const router = express.Router();
 
 router.route("/")
-  .get(getEvent)
+  .get(getAllEvent)
   .post(createEventValidator, creatEvent);
 
 router.route("/:id")

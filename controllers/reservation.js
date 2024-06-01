@@ -41,7 +41,7 @@ export const creatreservation = async (req, res) => {
 
 export const updatereservation = async (req, res) => {
   try {
-    const reservation = await reservationmodel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const reservation = await reservationmodel.findByIdAndUpdate(req.params.id, req.body);
     if (!reservation) return res.status(404).json({ message: "reservation not found" });
     res.status(200).json(reservation);
   } catch (error) {
@@ -53,7 +53,7 @@ export const deletereservation = async (req, res) => {
   try {
     console.log("ggg",req.params.id)
     const reservation = await reservationmodel.findByIdAndDelete(req.params.id);
-    if (!reservation) return res.status(404).json({ message: "type not found" });
+    if (!reservation) return res.status(404).json({ message: "reservation not found" });
     res.status(200).json({ message: "reservation deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
