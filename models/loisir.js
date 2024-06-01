@@ -32,18 +32,24 @@ const LoisirSchema = new Schema(
     averageprice: {
       type: Number,
     },
-    category: 
-      {
-        required: true,
-        type: Schema.Types.ObjectId,
-        ref: "LoisirCategory",
-      },
-      destination: 
-        {
-          required: true,
-          type: Schema.Types.ObjectId,
-          ref: "Destination",
-        },
+    latitude: {
+      type: Number,
+      required: true,
+    },
+    longitude: {
+      type: Number,
+      required: true,
+    },
+    category: {
+      required: true,
+      type: Schema.Types.ObjectId,
+      ref: "LoisirCategory",
+    },
+    destination: {
+      required: true,
+      type: Schema.Types.ObjectId,
+      ref: "Destination",
+    },
   },
   { timestamps: true }
 );
