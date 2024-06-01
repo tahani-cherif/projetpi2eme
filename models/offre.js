@@ -17,6 +17,12 @@ const OffreShema = new Schema(
         price: {
             type: Number,
         },
+        categorie:
+        {
+            required: true,
+            type: Schema.Types.ObjectId,
+            ref: "CAT",
+        }
     },
     { timestamps: true }
 );

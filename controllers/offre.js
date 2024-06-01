@@ -16,7 +16,7 @@ export function addOnce(req, res) {
 }
 
 export function getAll(req, res) {
-    Offre.find({})
+    Offre.find({}).populate('categorie')
 
         .then((offre) => {
             res.status(200).json(offre);

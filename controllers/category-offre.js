@@ -26,7 +26,7 @@ export function getAll(req, res) {
         });
 }
 export function getOnce(req, res) {
-    CAT.findById(req.params.cat)
+    CAT.findById(req.params.categorie)
         .then((cat) => {
             console.log(cat)
             res.status(200).json(cat);
@@ -37,7 +37,7 @@ export function getOnce(req, res) {
 }
 export function deleteOnce(req, res) {
     CAT.findOneAndDelete({
-        _id: req.params.cat,
+        _id: req.params.categorie,
     })
         .then((cat) => {
             res.status(200).json(cat);
