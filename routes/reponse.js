@@ -8,27 +8,29 @@ import { idValidationRules, reponseValidationRules } from "../utils/validators/r
 const router = express.Router();
 
 router
-  .route("/")
+  .route("/:idReclamation")
   .get(getAll)
-  .post(protect, allowedTo("admin"), 
+  .post(protect, allowedTo("admin","user"), 
    
     body("message").isLength({ min: 5 }),
-   
+    body("type"),
     body ("status"),
+    body ("idReclamation"),
+
     addOnce
   );
 
 router
   .route("/:_id")
-  .get(protect, allowedTo("admin"),getOnce)
-  .put(protect, allowedTo("admin"), 
-  
+  .get(protect, allowedTo("admin","user"),getOnce)
+  .put(protect, allowedTo("admin","user"), 
     body("message").isLength({ min: 5 }),
-
+    body("type"),
     body ("status"),
+    body ("idReclamation"),
     putOnce
   )
-  .delete(protect, allowedTo("admin"), 
+  .delete(protect, allowedTo("admin","user"), 
     idValidationRules(),
     deleteOnce)
 
