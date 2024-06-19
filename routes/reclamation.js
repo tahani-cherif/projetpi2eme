@@ -1,33 +1,35 @@
 import express from "express";
 import { body } from "express-validator";
+import { allowedTo, protect } from "../controllers/auth.js";
 
-import {
-  getAll,
-  addOnce,
-  getOnce,
-  putOnce,
-} from "../controllers/reclamation.js";
+import { getAll, addOnce, getOnce, putOnce,deleteOnce } from "../controllers/reclamation.js";
+/*import { idValidationRules, reclamationValidationRules } from "../utils/validators/reclamationValidator.js";*/
+import { idValidationRules, reclamationValidationRules } from "../utils/validators/reclamationValidator.js";
+
 
 const router = express.Router();
 
 router
   .route("/")
-  .get(getAll)
-  .post(
-    body("message").isLength({ min: 5 }),
-    body("email"),
-    body("type"),
+  .get(protect, allowedTo("admin", "user"), getAll)
+  .post(protect, allowedTo("admin", "user"), 
+   
+    reclamationValidationRules(),
     addOnce
   );
 
 router
   .route("/:_id")
-  .get(getOnce)
-  .put(
-    body("message").isLength({ min: 5 }),
-    body("email"),
-    body("type"),
+  .get(protect, allowedTo("admin", "user"), idValidationRules(),getOnce)
+  .put(protect, allowedTo("admin", "user"), 
+  
+    reclamationValidationRules(),
     putOnce
-  );
+  )
+  .delete(protect, allowedTo("admin", "user"), 
+    idValidationRules(),
+    deleteOnce)
+
+  ;
 
 export default router;

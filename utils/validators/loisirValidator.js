@@ -50,6 +50,16 @@ const loisirValidator = [
       }
       return true;
     }),
+    body('destination')
+  .notEmpty()
+    .custom((destinations) => {
+      for (let id of destinations) {
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+          throw new Error('destination must contain valid ObjectId strings.');
+        }
+      }
+      return true;
+    }),
 ];
 
 export default loisirValidator;

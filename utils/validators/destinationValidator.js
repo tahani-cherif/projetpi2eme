@@ -14,18 +14,11 @@ const destinationValidator = [
     .optional()
     .isString()
     .withMessage('Localisation must be a string.'),
-  body('loisir')
-    .optional()
-    .isArray()
-    .withMessage('Loisir must be an array.')
-    .custom((loisir) => {
-      for (let id of loisir) {
-        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
-          throw new Error('Loisir must contain valid ObjectId strings.');
-        }
-      }
-      return true;
-    }),
+  body('imageUrl')
+  .notEmpty()
+  .withMessage('Image is required.')
+   
+
 ];
 
 export default destinationValidator;

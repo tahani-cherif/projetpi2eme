@@ -12,11 +12,11 @@ const DestinationSchema = new Schema(
       localisation: {
         type: String,
       },
-      loisir: 
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Loisir",
-        },
+      imageUrl: {
+        type: String,
+        required: true
+      },
+      
       
 },
 { timestamps: true }
