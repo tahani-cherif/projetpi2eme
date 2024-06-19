@@ -1,7 +1,6 @@
 import { check } from "express-validator";
 import validatorMiddleware from "../../middlewares/validatorMiddleware.js";
 import User from "../../models/user.js";
-import moment from "moment";
 
 export const signupValidator = [
   check("firstName").notEmpty().withMessage("firstName required"),
@@ -78,7 +77,7 @@ export const forgtpasswordvalidator = [
     .withMessage("Email required")
     .isEmail()
     .withMessage("Invalid email address"),
-  check("token").notEmpty().withMessage("token required"),
+  // check("token").notEmpty().withMessage("token required"),
   validatorMiddleware,
 ];
 export const updatepasswordValidator = [
