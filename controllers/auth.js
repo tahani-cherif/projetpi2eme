@@ -67,11 +67,13 @@ const login = asyncHandler(async (req, res, next) => {
 // @access  Public
 const forgetpassword = asyncHandler(async (req, res, next) => {
   const user = await usermodel.findOne({ email: req.body.email });
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE_TIME,
+  });
   if (!user) throw new NotAcceptable();
   await usermodel.findByIdAndUpdate(user?._id, {
-    tokenPassword: req.body.token,
+    tokenPassword: token,
   });
-
   const subject = "Reset Password";
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -99,8 +101,7 @@ const forgetpassword = asyncHandler(async (req, res, next) => {
                   <div style="margin:50px auto;width:70%;padding:20px 0">
                     <p style="font-size:1.1em">Bonjour,</p>
                     <p style="font-size:1.1em">cliquer sur cette button pour mise a jour votre button</p>
-                 <button>update password</button>
-                 token forget password : ${req.body.token}
+                 <a href="http://localhost:4200/#/forgetpassword/${token}"><button>update password</button></a>
                   </div>
                 </div>
                 <!-- partial -->
