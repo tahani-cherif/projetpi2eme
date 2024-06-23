@@ -17,10 +17,10 @@ const router = express.Router();
 
 
 // Route to create a new destination
-router.post('/',protect, allowedTo("admin","user"),multer("imageUrl", 512 * 1024), destinationValidator, createDestination);
-
+router.post('/',protect, destinationValidator, createDestination);
+//, allowedTo("admin","user"),multer("imageUrl", 512 * 1024)
 // Route to get all destinations
-router.get('/', protect, allowedTo("admin","user"),getAllDestinations);
+router.get('/',getAllDestinations);
 
 // Route to get a single destination by ID
 router.get('/:id',protect, allowedTo("admin","user"), [

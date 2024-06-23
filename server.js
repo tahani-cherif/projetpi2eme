@@ -6,8 +6,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cloudinary from "cloudinary";
 import destinationRoutes from './routes/destination.js';
-import loisirRoutes from './routes/loisir.js';
-import loisirCategoryRoutes from './routes/loisircategory.js';
+import activityRoutes from './routes/activity.js';
+import activityCategoryRoutes from './routes/activitycategory.js';
 
 
 import { router as userRoutes } from "./routes/user.js";
@@ -52,8 +52,8 @@ app.use(morgan(process.env.NODE_ENV));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/destinations', destinationRoutes);
-app.use('/api/loisirs', loisirRoutes);
-app.use('/api/loisirCategories', loisirCategoryRoutes);
+app.use('/api/activitys', activityRoutes);
+app.use('/api/activityCategories', activityCategoryRoutes);
 app.use("/api/circuits", circuitRoutes);
 app.use("/api/typeTransports", typeTransportRoutes);
 app.use("/api/stations", stationRoutes);
