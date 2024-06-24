@@ -18,18 +18,18 @@ router.post('/', activityCategoryValidator, createActivityCategory);
 router.get('/', getAllActivityCategories);
 
 // Route to get a single loisir category by ID
-router.get('/:id', protect, allowedTo("admin","user"),[
+router.get('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], getActivityCategoryById);
 
 // Route to update a loisir category by ID
-router.put('/:id', protect, allowedTo("admin","user"), [
+router.put('/:id',  [
   param('id').isMongoId().withMessage('Invalid ID format'),
   ...activityCategoryValidator
 ], updateActivityCategory);
 
 // Route to delete a loisir category by ID
-router.delete('/:id', protect, allowedTo("admin","user"), [
+router.delete('/:id', [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], deleteActivityCategory);
 
