@@ -16,13 +16,9 @@ import {
 
 const router = express.Router();
 
-router.route("/")
-  .get(getreservation)
-  .post(creatreservation, getreservation, creatreservation);
 
-router.route("/:id")
-  .get(getreservationbyid)
-  .put( updatereservation, updatereservation)
-  .delete( deletereservation, deletereservation);
+router.post("/create",creatreservation);
+router.get("/getByEvent/:id",getreservation);
+router.delete("/delete/:id",deletereservation);
 
   export { router };

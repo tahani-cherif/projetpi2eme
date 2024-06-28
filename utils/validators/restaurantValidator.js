@@ -1,11 +1,12 @@
 import { check } from "express-validator";
 import { validationResult } from "express-validator";
 
-export const createDestinationValidator = [
+export const createRestaurantValidator = [
   check("name").notEmpty().withMessage("Name is required"),
-  check("description").optional().isString().withMessage("Description must be a string"),
-  check("region").isArray().withMessage("Region must be an array of ObjectIds"),
-  check("region.*").isMongoId().withMessage("Each region ID must be valid"),
+  check("address").notEmpty().withMessage("Address is required"),
+  check("description").notEmpty().withMessage("Description is required"),
+  check("kitchen").notEmpty().withMessage("Kitchen type is required"),
+  check("averagePrice").isNumeric().withMessage("Average price must be a number"),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -15,7 +16,7 @@ export const createDestinationValidator = [
   },
 ];
 
-export const getDestinationValidator = [
+export const getRestaurantValidator = [
   check("id").isMongoId().withMessage("Invalid ID format"),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -26,12 +27,13 @@ export const getDestinationValidator = [
   },
 ];
 
-export const updateDestinationValidator = [
+export const updateRestaurantValidator = [
   check("id").isMongoId().withMessage("Invalid ID format"),
   check("name").optional().notEmpty().withMessage("Name is required"),
-  check("description").optional().isString().withMessage("Description must be a string"),
-  check("region").optional().isArray().withMessage("Region must be an array of ObjectIds"),
-  check("region.*").optional().isMongoId().withMessage("Each region ID must be valid"),
+  check("address").optional().notEmpty().withMessage("Address is required"),
+  check("description").optional().notEmpty().withMessage("Description is required"),
+  check("kitchen").optional().notEmpty().withMessage("Kitchen type is required"),
+  check("averagePrice").optional().isNumeric().withMessage("Average price must be a number"),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -41,7 +43,7 @@ export const updateDestinationValidator = [
   },
 ];
 
-export const deleteDestinationValidator = [
+export const deleteRestaurantValidator = [
   check("id").isMongoId().withMessage("Invalid ID format"),
   (req, res, next) => {
     const errors = validationResult(req);

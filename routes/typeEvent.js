@@ -1,12 +1,12 @@
 import express from "express";
 import {
-creattypeventValidator,
+  creattypeventValidator,
   gettypeventValidator,
   updatetypeventValidator,
   deletetypeventValidator,
 
-} 
-from "../utils/validators/typeventValidator.js";
+}
+  from "../utils/validators/typeventValidator.js";
 
 import {
   gettypevent,
@@ -18,14 +18,11 @@ import {
 
 const router = express.Router();
 
-router.route("/")
-  .get(gettypevent)
-  .post(creattypeventValidator, creattypevent);
+router.get('/getAll', gettypevent);
+router.post('/create', creattypeventValidator, creattypevent);
+router.get('/get/:id', gettypeventbyid);
+router.put('/update/:id', updatetypeventValidator, updatetypevent);
+router.delete('/delete/:id', deletetypevent);
 
-router.route("/:id")
-  .get(gettypeventbyid)
-  .put(updatetypeventValidator, updatetypevent)
-  .delete(deletetypevent);
-
-  export { router };
+export { router };
 

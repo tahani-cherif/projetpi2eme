@@ -5,27 +5,28 @@ import {
   updateEventValidator,
   deleteEventValidator,
 
-} 
-from "../utils/validators/eventValidator.js";
+}
+  from "../utils/validators/eventValidator.js";
 
 import {
   getEvent,
   creatEvent,
   updateevent,
   deleteevent,
-  getAllEvent
+  getAllEvent,
+  upcomingEvent
 } from "../controllers/event.js"
 
 const router = express.Router();
 
-router.route("/")
-  .get(getAllEvent)
-  .post(createEventValidator, creatEvent);
 
-router.route("/:id")
-  .get(getEventValidator, getEvent)
-  .put(updateEventValidator, updateevent)
-  .delete(deleteEventValidator, deleteevent);
+router.get("/getAll", getAllEvent);
+router.get("/upcoming", upcomingEvent);
+router.post("/create", createEventValidator, creatEvent);
+router.get("/get/:id", getEventValidator, getEvent)
+
+router.put('/update/:id', updateEventValidator, updateevent)
+router.delete('/delete/:id', deleteEventValidator, deleteevent);
 
 export { router };
 
