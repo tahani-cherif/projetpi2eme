@@ -96,14 +96,17 @@ export function getAll(req, res) {
 }
 
 export function addOnce(req, res) {
+  const validTypes = ["offre", "circuit", "evenement", "loisir", "destination"];
   if (!validationResult(req).isEmpty()) {
     res.status(400).json({ errors: validationResult(req).array() });
+  } else if (!validTypes.includes(req.body.libelles)) {
+    res.status(400).json({ error: "Les types acceptés sont: 'Offre', 'Circuit', 'Evenement', 'Loisir' ou 'Destination' ." });
+  
   } else {
     Type.create({
       libelles: req.body.libelles,
       
-     
-      
+  
     })
       .then((newType) => {
         res.status(200).json({

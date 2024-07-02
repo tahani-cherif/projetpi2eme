@@ -56,22 +56,12 @@ export const updateuserValidator = [
   check("lastName").optional(),
   check("address").optional(),
   check("city").optional(),
-  check("dateOfBirth").optional().isDate(),
+  check("dateOfBirth").optional(),
   check("phone")
     .optional()
     .isLength({ min: 8, max: 8 })
     .withMessage("Phone must be 8 characters"),
-  check("email")
-    .optional()
-    .isEmail()
-    .withMessage("Invalid email format")
-    .custom((val) =>
-      User.findOne({ email: val }).then((user) => {
-        if (user) {
-          return Promise.reject(new Error("E-mail already in use"));
-        }
-      })
-    ),
+  check("email").optional().isEmail().withMessage("Invalid email format"),
   check("password")
     .optional()
     .isLength({ min: 8 })
@@ -90,33 +80,31 @@ export const deleteuserValidator = [
 
 export const changeuserpasswordvalidate = [
   check("id").isMongoId().withMessage("Invalid user id format"),
-  body("currentpassword")
-    .notEmpty()
-    .withMessage("You must enter your current password"),
-  body("passwordconfirm")
-    .notEmpty()
-    .withMessage("You must enter your current password confirmation"),
-  body("password")
-    .notEmpty()
-    .withMessage("You must enter your new password")
-    .custom(async (val, { req }) => {
-      // 1) Verify current password
-      const user = await User.findById(req.params.id);
-      if (!user) {
-        throw new Error("There is no user for this id");
-      }
-      const isCorrectPassword = await bcrypt.compare(
-        req.body.currentpassword,
-        user.password
-      );
-      if (!isCorrectPassword) {
-        throw new Error("Incorrect current password");
-      }
-      // 2) Verify password confirmation
-      if (val !== req.body.passwordconfirm) {
-        throw new Error("Password confirmation does not match");
-      }
-      return true;
-    }),
+  // body("currentpassword")
+  //   .notEmpty()
+  //   .withMessage("You must enter your current password"),
+  // body("passwordconfirm")
+  //   .notEmpty()
+  //   .withMessage("You must enter your current password confirmation"),
+  body("password").notEmpty().withMessage("You must enter your new password"),
+  // .custom(async (val, { req }) => {
+  //   // 1) Verify current password
+  //   const user = await User.findById(req.params.id);
+  //   if (!user) {
+  //     throw new Error("There is no user for this id");
+  //   }
+  //   const isCorrectPassword = await bcrypt.compare(
+  //     req.body.currentpassword,
+  //     user.password
+  //   );
+  //   if (!isCorrectPassword) {
+  //     throw new Error("Incorrect current password");
+  //   }
+  //   // 2) Verify password confirmation
+  //   if (val !== req.body.passwordconfirm) {
+  //     throw new Error("Password confirmation does not match");
+  //   }
+  //   return true;
+  // }),
   validatorMiddleware,
 ];
