@@ -77,7 +77,7 @@ export const forgtpasswordvalidator = [
     .withMessage("Email required")
     .isEmail()
     .withMessage("Invalid email address"),
-  check("token").notEmpty().withMessage("token required"),
+  // check("token").notEmpty().withMessage("token required"),
   validatorMiddleware,
 ];
 export const updatepasswordValidator = [
