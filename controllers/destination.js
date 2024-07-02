@@ -85,7 +85,7 @@ export const updateDestination = async (req, res) => {
 // Delete a destination by ID
 export const deleteDestination = async (req, res) => {
   try {
-    const activities = await Activity.deleteMany({ category: req.params.id });
+    const activities = await Activity.deleteMany({ destination: req.params.id });
     const destination = await Destination.findByIdAndDelete(req.params.id);
     if (!destination) {
       return res.status(404).json({ error: 'Destination not found' });

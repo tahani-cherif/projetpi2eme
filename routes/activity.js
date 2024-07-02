@@ -13,13 +13,13 @@ import { allowedTo, protect } from "../controllers/auth.js";
 const router = express.Router();
 
 // Route to create a new loisir
-router.post('/', protect, allowedTo("admin","user"),activityValidator, createActivity);
+router.post('/',protect, allowedTo("admin","user"),activityValidator, createActivity);
 
 // Route to get all loisirs
-router.get('/',getAllActivitys);
+router.get('/',protect, allowedTo("admin","user"),getAllActivitys);
 
 // Route to get a single loisir by ID
-router.get('/:id', protect, allowedTo("admin","user"), [
+router.get('/:id',protect, allowedTo("admin","user"),  [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], getActivityById);
 
@@ -30,7 +30,7 @@ router.put('/:id', protect, allowedTo("admin","user"), [
 ], updateActivity);
 
 // Route to delete a loisir by ID
-router.delete('/:id',protect, allowedTo("admin"),[
+router.delete('/:id', protect, allowedTo("admin","user"),[
   param('id').isMongoId().withMessage('Invalid ID format')
 ], deleteActivity);
 
