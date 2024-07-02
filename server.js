@@ -43,7 +43,7 @@ mongoose
 
 
 
-app.use(cors());
+app.use(cors( ));
 app.use(morgan(process.env.NODE_ENV));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -53,8 +53,8 @@ app.use('/api/loisirCategories', loisirCategoryRoutes);
 
 
 app.use("/api/users", userRoutes);
-app.use("/offre", offreRoutes);
-app.use("/categorie", categorieRoutes);
+app.use("/api/offre", offreRoutes);
+app.use("/api/categorie", categorieRoutes);
 app.use('/api/reclamation', reclamationRoutes);
 app.use('/api/reponse', reponseRoutes);
 app.use('/api/type', typeRoutes);

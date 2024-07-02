@@ -47,3 +47,14 @@ export function deleteOnce(req, res) {
         });
 }
 
+export async function updateCategorie(req, res) {
+    try {
+        const categorie = await CAT.findByIdAndUpdate(req.params.categorie, req.body);
+        if (!categorie) {
+            return res.status(404).json({ error: 'categorie not found' });
+        }
+        res.status(200).json(categorie);
+    } catch (err) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}

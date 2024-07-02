@@ -10,4 +10,4 @@ const OffrecatShema = new Schema(
     { timestamps: true }
 );
 
-export default model("CAT", OffrecatShema);
+export default model("CategorieOffre", OffrecatShema);
