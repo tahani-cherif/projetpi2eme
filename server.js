@@ -6,8 +6,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cloudinary from "cloudinary";
 import destinationRoutes from "./routes/destination.js";
-import loisirRoutes from "./routes/loisir.js";
-import loisirCategoryRoutes from "./routes/loisircategory.js";
 import activityRoutes from "./routes/activity.js";
 import activityCategoryRoutes from "./routes/activitycategory.js";
 
