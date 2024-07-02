@@ -29,5 +29,6 @@ const stationSchema = new Schema(
     timestamps: true,
   }
 );
-
+// Create a geospatial index
+stationSchema.index({ latitude: 1, longitude: 1 });
 export default model("Station", stationSchema);
