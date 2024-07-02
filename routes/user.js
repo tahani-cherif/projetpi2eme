@@ -16,6 +16,7 @@ import {
   deleteuser,
   changeuserpassword,
   countuser,
+  getByCity,
 } from "../controllers/user.js";
 import { allowedTo, protect } from "../controllers/auth.js";
 
@@ -33,6 +34,7 @@ router
   .post(protect, allowedTo("admin"), createuserValidator, createuser);
 
 router.route("/count").get(protect, allowedTo("admin"), countuser);
+router.route("/getByCity").get(protect, allowedTo("admin"), getByCity);
 
 router
   .route("/:id")

@@ -62,10 +62,28 @@ const deleteuser = asyncHandler(async (req, res, next) => {
 // @access  Private
 const countuser = asyncHandler(async (req, res, next) => {
   const user = await usermodel.find();
+  const userycity = await usermodel
+    .aggregate([
+      {
+        $group: {
+          _id: "$city",
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ])
+    .then((results) => {
+      console.log("User count by city:", results);
+      return results;
+    });
+  console.log(userycity);
   res.status(200).send({
     count: user.length,
     userApproved: user.filter((user) => user.status).length,
     userNotApproved: user.filter((user) => !user.status).length,
+    userycity: userycity,
+    useradmin: user.filter((user) => user.role === "admin").length,
+    usersimple: user.filter((user) => user.role === "user").length,
   });
 });
 
@@ -83,6 +101,21 @@ const changeuserpassword = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({ data: user });
 });
+// @desc    getByCity
+// @route   PUT api/getByCity/
+// @access  Private
+const getByCity = asyncHandler(async (req, res, next) => {
+  const user = usermodel.aggregate([
+    {
+      $group: {
+        _id: "$city",
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { count: -1 } },
+  ]);
+  res.status(200).json({ data: user });
+});
 
 // Export all functions
 export {
@@ -93,4 +126,5 @@ export {
   deleteuser,
   changeuserpassword,
   countuser,
+  getByCity,
 };
