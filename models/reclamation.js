@@ -17,6 +17,16 @@ const reclamationSchema = new Schema(
             type: String,
             required: true
         },  
+        idType: {
+            type: Schema.Types.ObjectId,
+    
+            references: {
+            model: 'type', 
+            key: 'id', 
+            required: true
+            }
+            
+        },
         
     },
     {
