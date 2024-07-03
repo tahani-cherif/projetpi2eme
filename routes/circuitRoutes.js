@@ -11,7 +11,7 @@ import {
   updateCircuit,
   deleteCircuit,
 } from "../controllers/circuitController.js";
-import upload from "../middlewares/multer-config.js";
+import upload from "../middlewares/multerConfig.js";
 
 const router = express.Router();
 
@@ -25,10 +25,10 @@ const validate = (req, res, next) => {
 };
 
 // Routes
-router.post("/", upload('images', 10, { fileSize: 10 * 1024 * 1024 }), circuitValidationRules, validate, createCircuit); // Use the middleware
+router.post("/", upload.array('images', 10), circuitValidationRules, validate, createCircuit); // Use the middleware
 router.get("/", getAllCircuits);
 router.get("/:id", circuitIdValidationRules, validate, getCircuitById);
-router.put("/:id", upload('images', 10, { fileSize: 10 * 1024 * 1024 }), [...circuitIdValidationRules, ...circuitValidationRules], validate, updateCircuit); // Use the middleware
+router.put("/:id",  upload.array('images', 10), [...circuitIdValidationRules, ...circuitValidationRules], validate, updateCircuit); // Use the middleware
 
 router.delete("/:id", circuitIdValidationRules, validate, deleteCircuit);
 

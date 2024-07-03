@@ -1,17 +1,42 @@
+import mongoose from "mongoose";
 import Circuit from "../models/circuit.js";
 
 // Create a new circuit
 export const createCircuit = async (req, res) => {
   try {
-    const images = req.files.map((file) => file.path); // Get image paths from the uploaded files
-    const circuitData = { ...req.body, images };
-    const circuit = new Circuit(circuitData);
-    await circuit.save();
-    res.status(201).json(circuit);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const { name, duree, price, startDate, endDate, address, station, loisir } = req.body;
+    const host = req.headers.host;
+    const images = req.files.map(file => `http://${host}/${file.path.replace(/\\/g, '/')}`);
+
+    // Ensure loisir is an array of ObjectIds
+    const loisirArray = Array.isArray(loisir) ? loisir : loisir.split(',').map(id => id.trim());
+
+    // Validate each loisir ID to ensure it's a valid ObjectId
+    if (!loisirArray.every(id => mongoose.Types.ObjectId.isValid(id))) {
+      return res.status(400).json({ message: 'Invalid loisir ID(s)' });
+    }
+
+    const newCircuit = new Circuit({
+      name,
+      duree,
+      price,
+      startDate,
+      endDate,
+      address,
+      images,
+      station,
+      loisir: loisirArray
+    });
+
+    const savedCircuit = await newCircuit.save();
+    res.status(201).json(savedCircuit);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
   }
 };
+
+
 
 // Get all circuits
 export const getAllCircuits = async (req, res) => {
@@ -41,22 +66,32 @@ export const getCircuitById = async (req, res) => {
 // Update a circuit
 export const updateCircuit = async (req, res) => {
   try {
-    const images = req.files ? req.files.map((file) => file.path) : undefined;
-    const circuitData = images ? { ...req.body, images } : req.body;
-    const circuit = await Circuit.findByIdAndUpdate(
-      req.params.id,
-      circuitData,
-      { new: true, runValidators: true }
-    ).populate("station loisir");
-    if (!circuit) {
-      return res.status(404).json({ error: "Circuit not found" });
+    const { id } = req.params;
+    const { name, duree, price, startDate, endDate, address, station, loisir } = req.body;
+    const host = req.headers.host;
+    const images = req.files.map(file => `http://${host}/${file.path.replace(/\\/g, '/')}`);
+    // Ensure loisir is an array of ObjectIds
+    const loisirArray = Array.isArray(loisir) ? loisir : loisir.split(',').map(id => id.trim());
+
+    // Validate each loisir ID to ensure it's a valid ObjectId
+    if (!loisirArray.every(id => mongoose.Types.ObjectId.isValid(id))) {
+      return res.status(400).json({ message: 'Invalid loisir ID(s)' });
     }
-    res.status(200).json(circuit);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const updatedCircuit = await Circuit.findByIdAndUpdate(
+      id,
+      { name, duree, price, startDate, endDate, address, images, station, loisir:loisirArray },
+      { new: true }
+    );
+
+    if (!updatedCircuit) {
+      return res.status(404).json({ message: 'Circuit not found' });
+    }
+
+    res.status(200).json(updatedCircuit);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };
-
 // Delete a circuit
 export const deleteCircuit = async (req, res) => {
   try {

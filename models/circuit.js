@@ -38,7 +38,7 @@ const circuitSchema = new Schema(
       {
         required: true,
         type: Schema.Types.ObjectId,
-        ref: "Station",
+        ref: "Loisir",
       },
     ],
   },
