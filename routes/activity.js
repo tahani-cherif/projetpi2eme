@@ -35,7 +35,7 @@ router.delete('/:id', protect, allowedTo("admin","user"),[
 ], deleteActivity);
 
 // Route to get loisirs by category "restaurant" and kitchen type
-router.get('/category/restaurant', protect, allowedTo("admin","user"), [
+router.get('/category/Restaurant', protect, allowedTo("admin","user"), [
   query('kitchen').notEmpty().withMessage('Kitchen type is required')
 ], getActivitysByCategoryAndKitchen);
 
