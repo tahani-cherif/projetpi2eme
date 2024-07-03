@@ -14,7 +14,7 @@ export const createStation = async (req, res) => {
 // Get all stations
 export const getAllStations = async (req, res) => {
   try {
-    const stations = await Station.find().populate('typeTransport');
+    const stations = await Station.find().populate("typeTransport");
     res.status(200).json(stations);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -24,7 +24,9 @@ export const getAllStations = async (req, res) => {
 // Get a station by ID
 export const getStationById = async (req, res) => {
   try {
-    const station = await Station.findById(req.params.id).populate('typeTransport');
+    const station = await Station.findById(req.params.id).populate(
+      "typeTransport"
+    );
     if (!station) {
       return res.status(404).json({ error: "Station not found" });
     }
@@ -37,7 +39,10 @@ export const getStationById = async (req, res) => {
 // Update a station
 export const updateStation = async (req, res) => {
   try {
-    const station = await Station.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).populate('typeTransport');
+    const station = await Station.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    }).populate("typeTransport");
     if (!station) {
       return res.status(404).json({ error: "Station not found" });
     }
@@ -55,6 +60,57 @@ export const deleteStation = async (req, res) => {
       return res.status(404).json({ error: "Station not found" });
     }
     res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Get stations sorted by distance
+export const getStationsByDistance = async (req, res) => {
+  const { latitude, longitude } = req.body;
+  if (!latitude || !longitude) {
+    return res
+      .status(400)
+      .json({ error: "Latitude and longitude are required" });
+  }
+
+  try {
+    const stations = await Station.aggregate([
+      {
+        $addFields: {
+          distance: {
+            $sqrt: {
+              $add: [
+                { $pow: [{ $subtract: ["$latitude", latitude] }, 2] },
+                { $pow: [{ $subtract: ["$longitude", longitude] }, 2] },
+              ],
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "typetransports", // Assuming the collection name is "typetransports"
+          localField: "typeTransport",
+          foreignField: "_id",
+          as: "typeTransport",
+        },
+      },
+      {
+        $unwind: "$typeTransport",
+      },
+      {
+        $project: {
+          name: 1,
+          typeTransportName: "$typeTransport.name",
+          distance: { $multiply: ["$distance", 100] }, // Convert meters to kilometers
+        },
+      },
+      {
+        $sort: { distance: 1 },
+      },
+    ]);
+    res.status(200).json(stations);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -46,6 +46,17 @@ export function deleteOnce(req, res) {
             res.status(500).json({ error: err });
         });
 }
+export async function updateOffre(req, res) {
+    try {
+        const offre = await Offre.findByIdAndUpdate(req.params.id, req.body);
+        if (!offre) {
+          return res.status(404).json({ error: 'offre not found' });
+        }
+        res.status(200).json(offre);
+      } catch (err) {
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    }
 
 export function countoffre(req, res) {
     Offre.find()

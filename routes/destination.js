@@ -17,24 +17,24 @@ const router = express.Router();
 
 
 // Route to create a new destination
-router.post('/',protect, allowedTo("admin","user"),multer("imageUrl", 512 * 1024), destinationValidator, createDestination);
+router.post('/', protect,  allowedTo("admin","user"),multer("imageUrl", 512 * 1024), destinationValidator, createDestination);
 
 // Route to get all destinations
-router.get('/', protect, allowedTo("admin","user"),getAllDestinations);
+router.get('/', protect,  allowedTo("admin","user"), getAllDestinations);
 
 // Route to get a single destination by ID
-router.get('/:id',protect, allowedTo("admin","user"), [
+router.get('/:id', protect,  allowedTo("admin","user"),[
   param('id').isMongoId().withMessage('Invalid ID format')
 ], getDestinationById);
 
 // Route to update a destination by ID
-router.put('/:id',protect, allowedTo("admin","user"),[
+router.put('/:id',protect,  allowedTo("admin","user"),[
   param('id').isMongoId().withMessage('Invalid ID format'),
   ...destinationValidator
 ], updateDestination);
 
 // Route to delete a destination by ID
-router.delete('/:id',protect, allowedTo("admin"), [
+router.delete('/:id',protect,  allowedTo("admin","user"), [
   param('id').isMongoId().withMessage('Invalid ID format')
 ], deleteDestination);
 

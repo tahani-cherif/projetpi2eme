@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
 
-import { getAll, addOnce, getOnce, deleteOnce } from "../controllers/category-offre.js";
+import { getAll, addOnce, getOnce, deleteOnce, updateCategorie } from "../controllers/category-offre.js";
 import { allowedTo, protect } from "../controllers/auth.js";
 
 const router = express.Router();
@@ -16,7 +16,7 @@ router
     .get(getAll);
 
 
-router.route("/:categorie").get(protect, allowedTo("admin", "user"),getOnce).delete(deleteOnce);
+router.route("/:categorie").get(protect, allowedTo("admin", "user"), getOnce).delete(deleteOnce).put(protect, allowedTo("admin", "user"),updateCategorie);
 
 
 

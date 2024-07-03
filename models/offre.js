@@ -6,11 +6,11 @@ const OffreShema = new Schema(
             type: String,
             required: true,
         },
-        Dtedebut: {
+        dated: {
             type: Date,
             required: true,
         },
-        Dtefin: {
+        datef: {
             type: Date,
             required: true,
         },
@@ -21,7 +21,7 @@ const OffreShema = new Schema(
         {
             required: true,
             type: Schema.Types.ObjectId,
-            ref: "CAT",
+            ref: "CategorieOffre",
         }
     },
     { timestamps: true }

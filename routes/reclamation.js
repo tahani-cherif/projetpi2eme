@@ -2,12 +2,14 @@ import express from "express";
 import { body } from "express-validator";
 import { allowedTo, protect } from "../controllers/auth.js";
 
-import { getAll, addOnce, getOnce, putOnce,deleteOnce } from "../controllers/reclamation.js";
+import { getAll, addOnce, getOnce, putOnce,deleteOnce,generatePdf } from "../controllers/reclamation.js";
 /*import { idValidationRules, reclamationValidationRules } from "../utils/validators/reclamationValidator.js";*/
 import { idValidationRules, reclamationValidationRules } from "../utils/validators/reclamationValidator.js";
 
 
 const router = express.Router();
+
+router.route("/generate-pdf/:id").get(generatePdf);
 
 router
   .route("/")
@@ -18,8 +20,9 @@ router
     addOnce
   );
 
+
 router
-  .route("/:_id")
+  .route("/:id")
   .get(protect, allowedTo("admin", "user"), idValidationRules(),getOnce)
   .put(protect, allowedTo("admin", "user"), 
   

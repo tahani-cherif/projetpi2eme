@@ -12,3 +12,7 @@ export const stationValidationRules = [
 export const stationIdValidationRules = [
   param("id").isMongoId(),
 ];
+export const distanceValidationRules = [
+  body("latitude").isFloat({ min: -90, max: 90 }).notEmpty(),
+  body("longitude").isFloat({ min: -180, max: 180 }).notEmpty(),
+];
