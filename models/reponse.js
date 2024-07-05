@@ -9,22 +9,11 @@ const reponseSchema = new Schema(
             required: true
         },
        
-       
-        status: {
-            piece_jointe:String,
-            type: String,
-            required: true
-        },
-        idReclamation: {
+        reclamation: {
+            required: true,
             type: Schema.Types.ObjectId,
-    
-            references: {
-            model: 'reclamation', 
-            key: 'id', 
-            required: true
-            }
-            
-        },
+            ref: "Reclamation",
+          },
         
     },
     {
@@ -32,4 +21,4 @@ const reponseSchema = new Schema(
     }
 );
 
-export default model('reponse', reponseSchema);
+export default model('Reponse', reponseSchema);

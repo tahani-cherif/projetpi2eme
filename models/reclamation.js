@@ -8,25 +8,17 @@ const reclamationSchema = new Schema(
             required: true
         },
         
-       type: {
-            type: String,
-            required: true
-        },
+    
         status: {
             piece_jointe:String,
             type: String,
             required: true
         },  
-        idType: {
+        typeReclamation: {
+            required: true,
             type: Schema.Types.ObjectId,
-    
-            references: {
-            model: 'type', 
-            key: 'id', 
-            required: true
-            }
-            
-        },
+            ref: "Type",
+          },
         
     },
     {

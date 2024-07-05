@@ -1,11 +1,12 @@
 import { validationResult } from "express-validator";
+import Type from "../models/type.js";
 
 import Reclamation from "../models/reclamation.js";
 import Reponse from "../models/reponse.js";
 import { notifclientmail, notifadminmail } from "./mail.js";
 import pdfkit from 'pdfkit';
 export function getAll(req, res) {
-  Reclamation.find({})
+  Reclamation.find({}).populate('typeReclamation')
     .then((docs) => {
 
       res.status(200).json(docs);
@@ -15,48 +16,39 @@ export function getAll(req, res) {
     });
 }
 
-export function addOnce(req, res) {
-  const user = req.user;
-  console.log(user.email)
-  const validTypes = ["offre", "circuit", "evenement", "loisir", "destination"];
-  if (!validationResult(req).isEmpty()) {
-    res.status(400).json({ errors: validationResult(req).array() });
-  } else if (!validTypes.includes(req.body.type)) {
-    res.status(400).json({ error: "Les types acceptés sont: 'Offre', 'Circuit', 'Evenement', 'Loisir' ou 'Destination' ." });
 
-  } else
-   { Reclamation.create({
+
+export async function addOnce(req, res) {
+  const user = req.user || { email: "chaymabothmen@gmail.com" };
+  console.log(user.email);
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const newReclamation = await Reclamation.create({
       message: req.body.message,
-      status: req.body.status,
-      type: req.body.type,
-      idType: req.body.idType
+      status:"en attente",
+      typeReclamation: req.body.typeReclamation
+    });
 
-    })
-      .then((newReclamation) => {
-        console.log(newReclamation);
+    const type = await Type.findById(req.body.typeReclamation);
 
-        notifadminmail(user.email, req.body.type, req.body.message, "objet").then(response => {
-          console.log(response);
-        }).catch(error => {
-          console.error("Error:", error);
-        });
-        /* appel fctmailclient*/
-        notifclientmail(user.email, req.body.type, req.body.message,newReclamation.id ).then(response => {
-          console.log(response);
-          
+    const adminMailPromise = notifadminmail(user.email, type.libelles, req.body.message, "objet");
+    const clientMailPromise = notifclientmail(user.email, type.libelles, req.body.message, newReclamation.id);
 
-        })
-          .catch(error => {
-            console.error("Error:", error);
-          });
+    await Promise.all([adminMailPromise, clientMailPromise]);
 
-          res.status(200).json(newReclamation);
-      })
-      .catch((err) => {
-        res.status(500).json({ error: err });
-      });
+    console.log(newReclamation);
+    res.status(200).json(newReclamation);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: err.message });
   }
 }
+
 
 
 
@@ -72,7 +64,7 @@ export function getOnce(req, res) {
 export async function generatePdf(req, res) {
   try {
     const { id } = req.params;
-    const reclamation = await Reclamation.findById(id);
+    const reclamation = await Reclamation.findById(id).populate('typeReclamation');
 
     if (!reclamation) {
       return res.status(404).send('Reclamation not found');
@@ -93,7 +85,7 @@ export async function generatePdf(req, res) {
     
     doc.font('Helvetica-Bold').fontSize(14).text('De type: ', {
       align: 'left'
-    }).font('Helvetica').text(reclamation.type, {
+    }).font('Helvetica').text(reclamation.typeReclamation.libelles, {
       align: 'left'
     });
     
@@ -135,7 +127,7 @@ export async function putOnce(req, res) {
   newReclamation = {
     message: req.body.message,
     status: req.body.status,
-    type: req.body.type,
+    typeReclamation: req.body.typeReclamation,
 
 
   }
@@ -152,7 +144,7 @@ export async function putOnce(req, res) {
 
 }
 export function deleteOnce(req, res) {
-  Reclamation.findByIdAndDelete({ _id: req.params._id })
+  Reclamation.findByIdAndDelete({ _id: req.params.id })
     .then((doc) => {
       res.status(200).json(doc);
     })

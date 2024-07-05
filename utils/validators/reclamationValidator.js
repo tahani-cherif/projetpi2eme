@@ -8,23 +8,12 @@ export const reclamationValidationRules = () => {
             .notEmpty()
             .withMessage('Message is required'),
         
-        body('type')
-            .isString()
-            .withMessage('Type must be a string')
-            .notEmpty()
-            .withMessage('Type is required'),
-        
-        body('status')
-            .isString()
-            .withMessage('Status must be a string')
-            .notEmpty()
-            .withMessage('Status is required')
     ];
 };
 
 export const idValidationRules = () => {
     return [
-        param('id')
+        param('_id')
             .isMongoId()
             .withMessage('Invalid ID format')
     ];

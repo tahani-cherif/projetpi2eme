@@ -20,26 +20,25 @@ export function addOnce(req, res) {
   if (!validationResult(req).isEmpty()) {
     res.status(400).json({ errors: validationResult(req).array() });
   } else {
-    Reclamation.findById(req.params.idReclamation)
+    Reclamation.findById(req.body.reclamationId)
       .then((newReclamation) => {
         Reponse.create({
-          message: newReclamation.message,
-          status: newReclamation.status,
-          type: newReclamation.type,
-          idReclamation: newReclamation._id,
+          message:req.body.message,
+        
+          reclamation: newReclamation._id,
 
         })
-          .then((newReponse) => {
-            notifclientmail(user.email, req.body.type, req.body.message,req.body.status, newReclamation.id).then(response => {
+          .then(async (newReponse) => {
+            notifclientmail(user.email,  req.body.message, newReclamation.id).then(response => {
               console.log(response);
             })
               .catch(error => {
                 console.error("Error:", error);
               });
+            await  Reclamation.findByIdAndUpdate(newReclamation._id, {status: "traitée"})
             res.status(200).json({
               message: newReclamation.message,
-              status: newReclamation.status,
-              type: newReclamation.type,
+            
 
               reponse: newReponse
 
