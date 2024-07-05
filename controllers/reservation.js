@@ -37,8 +37,10 @@ export const creatreservation = async (req, res) => {
 
     const reservation = await reservationmodel.create(req.body);
     await eventmodel.findByIdAndUpdate(event._id, { nmbrReservation: event.nmbrReservation + 1 })
+    if (reservation.email){
 
-    sendMail(reservation.email, "Reservation created", getMessage(event, reservation, "created"));
+      sendMail(reservation.email, "Reservation created", getMessage(event, reservation, "created"));
+    }
 
     res.status(201).json(reservation);
   } catch (error) {
