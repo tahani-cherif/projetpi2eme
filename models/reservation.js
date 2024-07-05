@@ -7,6 +7,10 @@ const reservationSchema = new Schema(
                   type: String,
                   required: true,
             },
+            email:{
+                  type:String,
+                  required: true
+            },
             event: {
                   type: Schema.Types.ObjectId, ref: "Event"
             },
