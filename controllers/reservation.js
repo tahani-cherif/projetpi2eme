@@ -82,14 +82,14 @@ function sendMail(to, object, message) {
     port: 587, // Replace with your Exchange SMTP port (usually 587 or 25)
     secure: false, // true for 465, false for other ports
     auth: {
-      user: "cheriftahani92@gmail.com",
-      pass: "gnaqzqjdlqzyhxyl",
+      user: "noortissaoui@gmail.com",
+      pass: "fsoqweqykdfqrvhj",
     },
   });
 
   // Setup email data
   let mailOptions = {
-    from: 'cheriftahani92@gmail.com', // Sender address
+    from: 'noortissaoui@gmail.com', // Sender address
     to: `${to}`, // List of receivers
     subject: `${object}`, // Subject line
     text: `${message}`, // Plain text body
