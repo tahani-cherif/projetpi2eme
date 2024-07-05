@@ -1,11 +1,28 @@
 import Activity from '../models/activity.js';
 import { validationResult } from 'express-validator';
-
+import cloudinary from '../cloudinary.js';
 // Create a new loisir
 export const createActivity = async (req, res) => {
 
   try {
-    const activity =await Activity.create(req.body)
+    
+    let imageUrl = '';
+    if (req.file ) {
+     
+          
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'activities'
+      });
+      
+      imageUrl = result.secure_url;
+    }
+
+    const activity = new Activity({
+      ...req.body,
+      imageUrl
+    });
+
+    await activity.save();
     res.status(201).json(activity);
   } catch (err) {
     res.status(500).json({ error: 'Internal Server Error' });

@@ -50,6 +50,10 @@ const ActivitySchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Destination",
     },
+    imageUrl: {
+      type: String,
+      required: true
+    },
   },
   { timestamps: true }
 );
