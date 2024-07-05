@@ -12,6 +12,7 @@ import activityCategoryRoutes from "./routes/activitycategory.js";
 import { router as userRoutes } from "./routes/user.js";
 import { router as offreRoutes } from "./routes/offre.js";
 import { router as categorieRoutes } from "./routes/category-offre.js";
+import { fileURLToPath } from 'url';
 
 import reclamationRoutes from "./routes/reclamation.js";
 import reponseRoutes from "./routes/reponse.js";
