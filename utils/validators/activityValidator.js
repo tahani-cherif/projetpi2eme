@@ -44,6 +44,9 @@ const activityValidator = [
   .notEmpty(),
     body('destination')
   .notEmpty(),
+  body('imageUrl')
+  .notEmpty()
+  .withMessage('Image is required.')
 ];
 
 export default activityValidator;

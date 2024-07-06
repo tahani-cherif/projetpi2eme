@@ -1,9 +1,30 @@
+import Activity from '../models/activity.js';
+import { validationResult } from 'express-validator';
+import cloudinary from '../cloudinary.js';
 import Activity from "../models/activity.js";
 import { validationResult } from "express-validator";
 
 // Create a new loisir
 export const createActivity = async (req, res) => {
   try {
+    
+    let imageUrl = '';
+    if (req.file ) {
+     
+          
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'activities'
+      });
+      
+      imageUrl = result.secure_url;
+    }
+
+    const activity = new Activity({
+      ...req.body,
+      imageUrl
+    });
+
+    await activity.save();
     const activity = await Activity.create(req.body);
     res.status(201).json(activity);
   } catch (err) {

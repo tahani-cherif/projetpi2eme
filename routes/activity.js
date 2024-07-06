@@ -1,5 +1,10 @@
 import express from "express";
 import { param, query } from "express-validator";
+import express from 'express';
+import { param , query } from 'express-validator';
+import cloudinary from 'cloudinary';
+import multer from "../middlewares/multer-config.js";
+import fileUpload from 'express-fileupload';
 import {
   createActivity,
   getAllActivitys,
@@ -22,6 +27,7 @@ router.post(
   activityValidator,
   createActivity
 );
+router.post('/',protect, allowedTo("admin","user"),multer("imageUrl", 512 * 1024), activityValidator, createActivity);
 
 // Route to get all loisirs
 router.get("/", protect, allowedTo("admin", "user"), getAllActivitys);
