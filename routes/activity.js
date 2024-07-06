@@ -18,13 +18,7 @@ import { allowedTo, protect } from "../controllers/auth.js";
 const router = express.Router();
 
 // Route to create a new loisir
-router.post(
-  "/",
-  protect,
-  allowedTo("admin", "user"),
-  activityValidator,
-  createActivity
-);
+
 router.post('/',protect, allowedTo("admin","user"),multer("imageUrl", 512 * 1024), activityValidator, createActivity);
 
 // Route to get all loisirs
@@ -38,6 +32,8 @@ router.get(
   [param("id").isMongoId().withMessage("Invalid ID format")],
   getActivityById
 );
+
+
 router.get(
   "/byDestination/:destinationId",
   protect,
