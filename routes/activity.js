@@ -1,7 +1,5 @@
 import express from "express";
 import { param, query } from "express-validator";
-import express from 'express';
-import { param , query } from 'express-validator';
 import cloudinary from 'cloudinary';
 import multer from "../middlewares/multer-config.js";
 import fileUpload from 'express-fileupload';

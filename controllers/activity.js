@@ -1,8 +1,7 @@
 import Activity from '../models/activity.js';
 import { validationResult } from 'express-validator';
 import cloudinary from '../cloudinary.js';
-import Activity from "../models/activity.js";
-import { validationResult } from "express-validator";
+
 
 // Create a new loisir
 export const createActivity = async (req, res) => {
@@ -25,7 +24,6 @@ export const createActivity = async (req, res) => {
     });
 
     await activity.save();
-    const activity = await Activity.create(req.body);
     res.status(201).json(activity);
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });
