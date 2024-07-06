@@ -6,6 +6,7 @@ import {
   updateStation,
   deleteStation,
   getStationsByDistance,
+  getStationsByTypeTransport,
 } from "../controllers/stationController.js";
 import {
   stationValidationRules,
@@ -29,6 +30,8 @@ const validate = (req, res, next) => {
 router.post("/", stationValidationRules, validate, createStation);
 router.get("/", getAllStations);
 router.get("/:id", stationIdValidationRules, validate, getStationById);
+router.get("/byTypeTransport/:id/:latitude/:longitude", getStationsByTypeTransport);
+
 router.put(
   "/:id",
   [...stationIdValidationRules, ...stationValidationRules],

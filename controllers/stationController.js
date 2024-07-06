@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import Station from "../models/station.js";
+import typeTransport from "../models/typeTransport.js";
 
 // Create a new station
 export const createStation = async (req, res) => {
@@ -21,6 +23,64 @@ export const getAllStations = async (req, res) => {
   }
 };
 
+// Get stations sorted by TypeTransport
+export const getStationsByTypeTransport = async (req, res) => {
+  try {
+    const { id, latitude, longitude } = req.params;
+
+    // Ensure latitude and longitude are numbers
+    const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
+
+    // Create a new ObjectId instance for the typeTransport field
+    const typeTransportObjectId = new mongoose.Types.ObjectId(id);
+
+    const stations = await Station.aggregate([
+      {
+        $match: { typeTransport: typeTransportObjectId }
+      },
+      {
+        $addFields: {
+          distance: {
+            $sqrt: {
+              $add: [
+                { $pow: [{ $subtract: ["$latitude", lat] }, 2] },
+                { $pow: [{ $subtract: ["$longitude", lng] }, 2] }
+              ]
+            }
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'typetransports', // Assuming the collection name is "typetransports"
+          localField: 'typeTransport',
+          foreignField: '_id',
+          as: 'typeTransport'
+        }
+      },
+      {
+        $unwind: '$typeTransport'
+      },
+      {
+        $project: {
+          name: 1,
+          typeTransportName: '$typeTransport.name',
+          latitude: 1,
+          longitude: 1,
+          distance: { $multiply: ["$distance", 100] }, // Convert meters to kilometers
+        }
+      },
+      {
+        $sort: { distance: 1 }
+      }
+    ]);
+
+    res.status(200).json(stations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 // Get a station by ID
 export const getStationById = async (req, res) => {
   try {
@@ -103,6 +163,8 @@ export const getStationsByDistance = async (req, res) => {
         $project: {
           name: 1,
           typeTransportName: "$typeTransport.name",
+          latitude: 1,
+          longitude: 1,
           distance: { $multiply: ["$distance", 100] }, // Convert meters to kilometers
         },
       },
