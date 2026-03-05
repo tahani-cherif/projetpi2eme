@@ -13,10 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: SonarCloud Scan
+      - name: Run SonarCloud Scanner
         uses: sonarsource/sonarqube-scan-action@v2
         with:
           projectBaseDir: .
-          serverUrl: https://sonarcloud.io
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
